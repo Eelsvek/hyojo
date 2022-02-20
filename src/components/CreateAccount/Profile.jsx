@@ -20,8 +20,6 @@ const interestsOptions = [
 ];
 
 function Profile() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [interest, setInterest] = useState('none');
   const [age, setAge] = useState('');
 
@@ -29,30 +27,10 @@ function Profile() {
     e.preventDefault();
   };
 
-  const submitDisabled = !(firstName && lastName && interest !== 'none' && age);
+  const submitDisabled = !(interest !== 'none' && age);
 
   return (
     <form onSubmit={onSubmit}>
-      <label htmlFor="firstName">
-        First Name
-        <input
-          required
-          name="firstName"
-          type="text"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-        />
-      </label>
-      <label htmlFor="lastName">
-        Last Name
-        <input
-          required
-          name="lastName"
-          type="text"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-        />
-      </label>
       <label htmlFor="interests">
         Interests
         <select
