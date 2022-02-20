@@ -1,17 +1,32 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
 function EmailPassword() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    // Do something
-    navigate('/create-account/profile');
+
+    setIsSubmitting(true);
+    try {
+      const auth = getAuth();
+      await createUserWithEmailAndPassword(auth, email, password);
+      navigate('/create-account/profile');
+    } catch (response) {
+      setErrorMessage(response.code);
+      setIsSubmitting(false);
+    }
   };
+
+  if (isSubmitting) {
+    return <div>Submitting...</div>;
+  }
 
   return (
     <form onSubmit={onSubmit}>
@@ -42,6 +57,9 @@ function EmailPassword() {
       >
         Submit
       </button>
+      {!!errorMessage && (
+        <p style={{ color: 'red', fontWeight: 'bold' }}>{errorMessage}</p>
+      )}
     </form>
   );
 }
