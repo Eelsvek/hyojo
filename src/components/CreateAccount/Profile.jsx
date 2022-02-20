@@ -27,7 +27,6 @@ function Profile() {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log('yo');
   };
 
   const submitDisabled = !(firstName && lastName && interest !== 'none' && age);
