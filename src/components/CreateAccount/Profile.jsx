@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { addDoc, collection } from 'firebase/firestore';
+
+import { auth, db } from '../../firebase';
 
 const interestsOptions = [
   {
@@ -23,8 +26,19 @@ function Profile() {
   const [interest, setInterest] = useState('none');
   const [age, setAge] = useState('');
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
+
+    try {
+      console.log('id: ', auth);
+      await addDoc(collection(db, 'user_profiles'), {
+        age,
+        interest,
+        firebase_uid: auth.currentUser?.id,
+      });
+    } catch (error) {
+      console.log('error', error);
+    }
   };
 
   const submitDisabled = !(interest !== 'none' && age);
