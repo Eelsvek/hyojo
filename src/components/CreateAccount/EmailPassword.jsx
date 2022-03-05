@@ -22,11 +22,9 @@ function EmailPassword() {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log('wtf', firebase);
       await firebase.doCreateUserWithEmailAndPassword(email, password);
       navigate('/create-account/profile');
     } catch (response) {
-      console.log('response', response);
       setErrorMessage(response.code);
     }
   };
