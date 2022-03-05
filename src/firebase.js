@@ -2,7 +2,7 @@ import { createContext}  from 'react';
 
 import { initializeApp } from 'firebase/app';
 import { createUserWithEmailAndPassword, getAuth } from  'firebase/auth';
-// import 'firebase/firestore';
+import { addDoc, collection, getFirestore } from 'firebase/firestore';
 
 export const FirebaseContext = createContext();
 
@@ -18,7 +18,11 @@ export default class Firebase {
     constructor() {
       this.app = initializeApp(firebaseConfig) 
       this.auth = getAuth(this.app)
-      // this.db = getFirestore(this.app)
+      this.db = getFirestore(this.app)
+    }
+
+    doAddDoc(collectionName, properties) {
+      return addDoc(collection(this.db, collectionName), { ...properties })
     }
 
     doCreateUserWithEmailAndPassword(email, password) {

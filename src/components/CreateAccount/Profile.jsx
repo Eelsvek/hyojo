@@ -1,9 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { addDoc, collection } from 'firebase/firestore';
 
 import { useNavigate } from 'react-router-dom';
-import { db } from '../../firebase';
-import { AuthContext } from '../../context/AuthContext';
+import { AuthContext } from '../../providers/AuthProvider';
+import { FirebaseContext } from '../../firebase';
 
 const interestsOptions = [
   {
@@ -27,15 +26,15 @@ const interestsOptions = [
 function Profile() {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+  const firebase = useContext(FirebaseContext);
 
   const [interest, setInterest] = useState('none');
   const [age, setAge] = useState('');
 
   const onSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      await addDoc(collection(db, 'user_profiles'), {
+      await firebase.doAddDoc('user_profiles', {
         age,
         interest,
         firebase_uid: user.uid,
