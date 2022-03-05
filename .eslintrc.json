@@ -19,6 +19,7 @@
   "plugins": ["react"],
   "rules": {
     "comma-dangle": "off",
+    "no-console": "off",
     "react/prop-types": "off"
   }
 }
