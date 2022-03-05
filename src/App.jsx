@@ -8,6 +8,8 @@ import Home from './components/Home';
 import EmailPassword from './components/CreateAccount/EmailPassword';
 import NotFound from './components/NotFound';
 import Profile from './components/CreateAccount/Profile';
+import AccountLayout from './layouts/AccountLayout';
+import RequireAuth from './components/RequireAuth';
 
 function App() {
   return (
@@ -18,6 +20,16 @@ function App() {
           <Route path="create-account" element={<CreateAccountLayout />}>
             <Route index element={<EmailPassword />} />
             <Route path="profile" element={<Profile />} />
+          </Route>
+          <Route
+            path="account"
+            element={
+              <RequireAuth>
+                <AccountLayout />
+              </RequireAuth>
+            }
+          >
+            <Route index element={<div>Yolo</div>} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
