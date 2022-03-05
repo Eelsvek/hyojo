@@ -1,16 +1,32 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { FirebaseContext } from '../../firebase';
+import { AuthContext } from '../../providers/AuthProvider';
 
 function EmailPassword() {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  const firebase = useContext(FirebaseContext);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const onSubmit = (e) => {
+  useEffect(() => {
+    if (user) {
+      navigate('/create-account/profile');
+    }
+  }, [user]);
+
+  const onSubmit = async (e) => {
     e.preventDefault();
-    // Do something
-    navigate('/create-account/profile');
+    try {
+      await firebase.doCreateUserWithEmailAndPassword(email, password);
+      navigate('/create-account/profile');
+    } catch (response) {
+      setErrorMessage(response.code);
+    }
   };
 
   return (
@@ -42,6 +58,9 @@ function EmailPassword() {
       >
         Submit
       </button>
+      {!!errorMessage && (
+        <p style={{ color: 'red', fontWeight: 'bold' }}>{errorMessage}</p>
+      )}
     </form>
   );
 }

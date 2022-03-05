@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../providers/AuthProvider';
+import { FirebaseContext } from '../../firebase';
 
 const interestsOptions = [
   {
@@ -20,40 +24,31 @@ const interestsOptions = [
 ];
 
 function Profile() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  const firebase = useContext(FirebaseContext);
+
   const [interest, setInterest] = useState('none');
   const [age, setAge] = useState('');
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    console.log('yo');
+    try {
+      await firebase.doAddDoc('user_profiles', {
+        age,
+        interest,
+        firebase_uid: user.uid,
+      });
+      navigate('/');
+    } catch (error) {
+      console.log('error', error);
+    }
   };
 
-  const submitDisabled = !(firstName && lastName && interest !== 'none' && age);
+  const submitDisabled = !(interest !== 'none' && age);
 
   return (
     <form onSubmit={onSubmit}>
-      <label htmlFor="firstName">
-        First Name
-        <input
-          required
-          name="firstName"
-          type="text"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-        />
-      </label>
-      <label htmlFor="lastName">
-        Last Name
-        <input
-          required
-          name="lastName"
-          type="text"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-        />
-      </label>
       <label htmlFor="interests">
         Interests
         <select

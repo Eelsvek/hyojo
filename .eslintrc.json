@@ -18,6 +18,7 @@
   },
   "plugins": ["react"],
   "rules": {
-    "comma-dangle": "off"
+    "comma-dangle": "off",
+    "react/prop-types": "off"
   }
 }
