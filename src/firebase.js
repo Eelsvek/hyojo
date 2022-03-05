@@ -1,6 +1,10 @@
+import { createContext}  from 'react';
+
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { createUserWithEmailAndPassword, getAuth } from  'firebase/auth';
+// import 'firebase/firestore';
+
+export const FirebaseContext = createContext();
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCZ-82Imypm6-_yitCDUlIq3VSTVIsqVo4',
@@ -10,8 +14,15 @@ const firebaseConfig = {
   messagingSenderId: '629370667563',
   appId: '1:629370667563:web:dd7cc08d0daf0e0976606e',
 };
+export default class Firebase {
+    constructor() {
+      this.app = initializeApp(firebaseConfig) 
+      this.auth = getAuth(this.app)
+      // this.db = getFirestore(this.app)
+    }
 
-const firebaseApp = initializeApp(firebaseConfig)
+    doCreateUserWithEmailAndPassword(email, password) {
+      return createUserWithEmailAndPassword(this.auth, email, password)
+    }
+}
 
-export const auth = getAuth()
-export const db = getFirestore(firebaseApp)
