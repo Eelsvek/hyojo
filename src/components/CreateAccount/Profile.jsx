@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { addDoc, collection } from 'firebase/firestore';
 
-import { auth, db } from '../../firebase';
+import { useNavigate } from 'react-router-dom';
+import { db } from '../../firebase';
+import { AuthContext } from '../../context/AuthContext';
 
 const interestsOptions = [
   {
@@ -23,6 +25,9 @@ const interestsOptions = [
 ];
 
 function Profile() {
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+
   const [interest, setInterest] = useState('none');
   const [age, setAge] = useState('');
 
@@ -30,12 +35,12 @@ function Profile() {
     e.preventDefault();
 
     try {
-      console.log('id: ', auth);
       await addDoc(collection(db, 'user_profiles'), {
         age,
         interest,
-        firebase_uid: auth.currentUser?.id,
+        firebase_uid: user.uid,
       });
+      navigate('/');
     } catch (error) {
       console.log('error', error);
     }

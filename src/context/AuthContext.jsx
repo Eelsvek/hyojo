@@ -1,14 +1,14 @@
 import React, { createContext, useState, useEffect, useMemo } from 'react';
 import { auth } from '../firebase';
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(({ email, uid }) => {
-      setUser({ email, uid });
+    const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+      setUser(firebaseUser);
     });
 
     return unsubscribe;
