@@ -31,9 +31,7 @@ export default function AuthProvider({ children }) {
   }, []);
 
   const value = useMemo(() => {
-    return {
-      user,
-    };
+    return user;
   }, [user]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

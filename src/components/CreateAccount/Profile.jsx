@@ -25,7 +25,7 @@ const interestsOptions = [
 
 function Profile() {
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  const user = useContext(AuthContext);
   const firebase = useContext(FirebaseContext);
 
   const [interest, setInterest] = useState('none');
