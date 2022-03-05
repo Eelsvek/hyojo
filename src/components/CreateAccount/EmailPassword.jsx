@@ -1,20 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
 
-import { auth } from '../../firebase';
-import { AuthContext } from '../../context/AuthContext';
+import { FirebaseContext } from '../../firebase';
+import { AuthContext } from '../../providers/AuthProvider';
 
 function EmailPassword() {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+  const firebase = useContext(FirebaseContext);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    console.log('woah', user);
     if (user) {
       navigate('/create-account/profile');
     }
@@ -22,11 +21,12 @@ function EmailPassword() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      console.log('wtf', firebase);
+      await firebase.doCreateUserWithEmailAndPassword(email, password);
       navigate('/create-account/profile');
     } catch (response) {
+      console.log('response', response);
       setErrorMessage(response.code);
     }
   };
